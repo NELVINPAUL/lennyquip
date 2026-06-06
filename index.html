@@ -1,892 +1,258 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LennQuip Medical Supplies - Medical Store</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f1f5f9 0%, #e0f2fe 50%, #f1f5f9 100%);
-            min-height: 100vh;
-        }
-
-        /* Header */
-        header {
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo-icon {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .logo-text h1 {
-            font-size: 1.75rem;
-            color: #1e293b;
-            font-weight: 700;
-        }
-
-        .logo-text p {
-            font-size: 0.75rem;
-            color: #64748b;
-            margin-top: 0.25rem;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            text-align: right;
-            gap: 0.25rem;
-        }
-
-        .contact-info p:first-child {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #1e293b;
-        }
-
-        .contact-info p:last-child {
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        .cart-icon-wrapper {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .cart-icon {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .cart-icon:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-        }
-
-        .cart-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                text-align: center;
-            }
-            .header-right {
-                justify-content: center;
-            }
-            .contact-info {
-                text-align: center;
-            }
-        }
-
-        /* Category Filter */
-        .filter-section {
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-            position: sticky;
-            top: 80px;
-            z-index: 40;
-            padding: 1rem;
-        }
-
-        .filter-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .filter-btn {
-            padding: 0.625rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        .filter-btn:hover {
-            background: #e2e8f0;
-        }
-
-        .filter-btn.active {
-            background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-        }
-
-        /* Main Content */
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 3rem 1rem;
-        }
-
-        .section-header {
-            margin-bottom: 2rem;
-        }
-
-        .section-header h2 {
-            font-size: 2rem;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-        }
-
-        .section-header p {
-            color: #64748b;
-            font-size: 0.95rem;
-        }
-
-        /* Product Grid */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-card:hover {
-            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
-            border-color: #0ea5e9;
-            transform: translateY(-2px);
-        }
-
-        .product-image-wrapper {
-            position: relative;
-            height: 200px;
-            background: #f1f5f9;
-            overflow: hidden;
-        }
-
-        .product-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .product-card:hover .product-image-wrapper img {
-            transform: scale(1.05);
-        }
-
-        .category-badge {
-            position: absolute;
-            top: 0.75rem;
-            right: 0.75rem;
-            background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.375rem 0.75rem;
-            border-radius: 20px;
-        }
-
-        .product-details {
-            padding: 1.25rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-name {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.75rem;
-            min-height: 2.4em;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-
-        .product-price {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #0284c7;
-            margin-bottom: 1rem;
-        }
-
-        .product-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-direction: column;
-        }
-
-        .add-to-cart-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            background: linear-gradient(135deg, #3b82f6 0%, #0284c7 100%);
-            color: white;
-            border: none;
-            padding: 0.875rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-        }
-
-        .add-to-cart-btn:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #0369a1 100%);
-            box-shadow: 0 4px 12px rgba(3, 105, 161, 0.3);
-            transform: scale(1.02);
-        }
-
-        .whatsapp-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
-            color: white;
-            border: none;
-            padding: 0.875rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
-
-        .whatsapp-btn:hover {
-            background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-            transform: scale(1.02);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            grid-column: 1 / -1;
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        .empty-state p {
-            color: #64748b;
-            font-size: 1.1rem;
-        }
-
-        /* Cart Modal */
-        .cart-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 100;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .cart-modal.active {
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-end;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-            }
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        .cart-sidebar {
-            background: white;
-            width: 100%;
-            max-width: 450px;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            animation: slideIn 0.3s ease;
-            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-        }
-
-        .cart-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
-            color: white;
-        }
-
-        .cart-header h2 {
-            font-size: 1.5rem;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .close-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .cart-items {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1.5rem;
-        }
-
-        .cart-item {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .cart-item-image {
-            width: 80px;
-            height: 80px;
-            background: #f1f5f9;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .cart-item-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .cart-item-details {
-            flex: 1;
-        }
-
-        .cart-item-name {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.25rem;
-            font-size: 0.95rem;
-        }
-
-        .cart-item-price {
-            color: #0284c7;
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .cart-item-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .qty-btn {
-            background: #f1f5f9;
-            border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .qty-btn:hover {
-            background: #e2e8f0;
-        }
-
-        .qty-input {
-            width: 40px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            padding: 0.25rem;
-            font-weight: 600;
-        }
-
-        .remove-btn {
-            background: none;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: all 0.2s ease;
-            margin-left: 0.5rem;
-        }
-
-        .remove-btn:hover {
-            transform: scale(1.15);
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 2rem;
-            color: #64748b;
-        }
-
-        .empty-cart-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        .cart-footer {
-            border-top: 1px solid #e2e8f0;
-            padding: 1.5rem;
-            background: #f8fafc;
-        }
-
-        .cart-summary {
-            margin-bottom: 1rem;
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            color: #64748b;
-        }
-
-        .summary-row.total {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #0284c7;
-            border-top: 2px solid #e2e8f0;
-            padding-top: 1rem;
-        }
-
-        .checkout-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .checkout-btn:hover {
-            background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-            transform: scale(1.02);
-        }
-
-        .checkout-btn:disabled {
-            background: #cbd5e1;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Footer */
-        footer {
-            background: #1e293b;
-            color: white;
-            margin-top: 4rem;
-            border-top: 1px solid #334155;
-        }
-
-        .footer-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 3rem 1rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .footer-section p {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #334155;
-            padding-top: 2rem;
-            text-align: center;
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-
-            .product-name {
-                font-size: 0.9rem;
-            }
-
-            .product-price {
-                font-size: 1.2rem;
-            }
-
-            main {
-                padding: 1.5rem 0.5rem;
-            }
-
-            .section-header h2 {
-                font-size: 1.5rem;
-            }
-
-            .cart-sidebar {
-                max-width: 100%;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <div class="logo-section">
-                <div class="logo-icon">🏥</div>
-                <div class="logo-text">
-                    <h1>LennQuip Medical Supplies</h1>
-                    <p>Quality Medical Solutions</p>
-                </div>
-            </div>
-            <div class="header-right">
-                <div class="contact-info">
-                    <p>📞 +254 700 396520</p>
-                    <p>WhatsApp Available</p>
-                </div>
-                <div class="cart-icon-wrapper" onclick="toggleCart()">
-                    <div class="cart-icon">🛒</div>
-                    <div class="cart-count" id="cartCount" style="display: none;">0</div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Category Filter -->
-    <div class="filter-section">
-        <div class="filter-container">
-            <div class="filter-buttons" id="filterButtons">
-                <button class="filter-btn active" onclick="filterProducts('All')">All</button>
-                <button class="filter-btn" onclick="filterProducts('Lab')">Lab</button>
-                <button class="filter-btn" onclick="filterProducts('Medical')">Medical</button>
-                <button class="filter-btn" onclick="filterProducts('Dental')">Dental</button>
-                <button class="filter-btn" onclick="filterProducts('Optical')">Optical</button>
-                <button class="filter-btn" onclick="filterProducts('Pharmaceutical')">Pharmaceutical</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <main>
-        <div class="section-header">
-            <h2 id="sectionTitle">All Products</h2>
-            <p id="productCount">44 products available</p>
-        </div>
-
-        <div class="products-grid" id="productsGrid"></div>
-    </main>
-
-    <!-- Cart Modal -->
-    <div class="cart-modal" id="cartModal" onclick="closeCartOnBackdrop(event)">
-        <div class="cart-sidebar">
-            <div class="cart-header">
-                <h2>Shopping Cart</h2>
-                <button class="close-btn" onclick="toggleCart()">✕</button>
-            </div>
-            
-            <div class="cart-items" id="cartItems">
-                <div class="empty-cart">
-                    <div class="empty-cart-icon">🛍️</div>
-                    <p>Your cart is empty</p>
-                </div>
-            </div>
-
-            <div class="cart-footer">
-                <div class="cart-summary">
-                    <div class="summary-row total">
-                        <span>Total Items:</span>
-                        <span id="totalItems">0</span>
-                    </div>
-                </div>
-                <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>Proceed to Checkout</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>LennQuip Medical Supplies</h3>
-                <p>Your trusted partner for quality medical, dental, optical, pharmaceutical, and laboratory supplies. We provide premium healthcare solutions for professionals and institutions.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Categories</h3>
-                <ul>
-                    <li>Lab Supplies</li>
-                    <li>Medical Supplies</li>
-                    <li>Dental Supplies</li>
-                    <li>Optical Supplies</li>
-                    <li>Pharmaceutical Products</li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>📞 Phone: 0700396520</p>
-                <p>💬 WhatsApp: wa.me/c/254700396520</p>
-                <p style="margin-top: 1rem; font-size: 0.85rem; color: #64748b;">Fast & Reliable Delivery | Professional Service</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 LennQuip Medical Supplies. All rights reserved. | Quality Healthcare Products & Services</p>
-        </div>
-    </footer>
-
-    <script>
-        // Product Database
+<!DOCTYPE html><html lang="en"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>LennQuip Medical Supplies - Medical Store</title>    <style>        * {            margin: 0;            padding: 0;            box-sizing: border-box;        }
+        body {            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            background: linear-gradient(135deg, #f1f5f9 0%, #e0f2fe 50%, #f1f5f9 100%);            min-height: 100vh;        }
+        /* Header */        header {            background: white;            border-bottom: 1px solid #e2e8f0;            position: sticky;            top: 0;            z-index: 50;            box-shadow: 0 1px 3px rgba(0,0,0,0.1);        }
+        .header-container {            max-width: 1400px;            margin: 0 auto;            padding: 1rem;            display: flex;            justify-content: space-between;            align-items: center;            flex-wrap: wrap;            gap: 2rem;        }
+        .logo-section {            display: flex;            align-items: center;            gap: 1rem;        }
+        .logo-icon {            width: 45px;            height: 45px;            background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);            border-radius: 8px;            display: flex;            align-items: center;            justify-content: center;            font-size: 1.5rem;        }
+        .logo-text h1 {            font-size: 1.75rem;            color: #1e293b;            font-weight: 700;        }
+        .logo-text p {            font-size: 0.75rem;            color: #64748b;            margin-top: 0.25rem;        }
+        .header-right {            display: flex;            align-items: center;            gap: 2rem;        }
+        .contact-info {            display: flex; flex-direction: column; text-align: right; gap: 0.25rem;        }
+        .contact-info p:first-child {            font-size: 0.9rem; font-weight: 600; color: #1e293b;        }
+        .contact-info p:last-child {            font-size: 0.75rem; color: #64748b;        }
+        .cart-icon-wrapper {            position: relative; cursor: pointer;        }
+        .cart-icon {            width: 45px; height: 45px; background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: all 0.3s ease;        }
+        .cart-icon:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); }
+        .cart-count {            position: absolute; top: -8px; right: -8px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;        }
+        @media (max-width: 768px) { .header-container { flex-direction: column; text-align: center; } .header-right { justify-content: center; } .contact-info { text-align: center; } }
+        /* Category Filter */        .filter-section { background: white; border-bottom: 1px solid #e2e8f0; position: sticky; top: 80px; z-index: 40; padding: 1rem; }
+        .filter-container { max-width: 1400px; margin: 0 auto; }
+        .filter-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+        .filter-btn { padding: 0.625rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease; background: #f1f5f9; color: #475569; }
+        .filter-btn:hover { background: #e2e8f0; }
+        .filter-btn.active { background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); color: white; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); }
+        /* Main Content */        main { max-width: 1400px; margin: 0 auto; padding: 3rem 1rem; }
+        .section-header { margin-bottom: 2rem; }
+        .section-header h2 { font-size: 2rem; color: #1e293b; margin-bottom: 0.5rem; }
+        .section-header p { color: #64748b; font-size: 0.95rem; }
+        /* Product Grid */        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+        .product-card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; transition: all 0.3s ease; border: 1px solid #e2e8f0; display: flex; flex-direction: column; }
+        .product-card:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.12); border-color: #0ea5e9; transform: translateY(-2px); }
+        .product-image-wrapper { position: relative; height: 200px; background: #f1f5f9; overflow: hidden; }
+        .product-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .product-card:hover .product-image-wrapper img { transform: scale(1.05); }
+        .category-badge { position: absolute; top: 0.75rem; right: 0.75rem; background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); color: white; font-size: 0.75rem; font-weight: 700; padding: 0.375rem 0.75rem; border-radius: 20px; }
+        .product-details { padding: 1.25rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-name { font-size: 1rem; font-weight: 600; color: #1e293b; margin-bottom: 0.75rem; min-height: 2.4em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .product-buttons { display: flex; gap: 0.5rem; flex-direction: column; margin-top: auto; }
+        .add-to-cart-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: linear-gradient(135deg, #3b82f6 0%, #0284c7 100%); color: white; border: none; padding: 0.875rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.95rem; }
+        .add-to-cart-btn:hover { background: linear-gradient(135deg, #2563eb 0%, #0369a1 100%); box-shadow: 0 4px 12px rgba(3, 105, 161, 0.3); transform: scale(1.02); }
+        .whatsapp-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: linear-gradient(135deg, #22c55e 0%, #10b981 100%); color: white; border: none; padding: 0.875rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; font-size: 0.95rem; }
+        .whatsapp-btn:hover { background: linear-gradient(135deg, #16a34a 0%, #059669 100%); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); transform: scale(1.02); }
+        /* Empty State */        .empty-state { text-align: center; padding: 3rem; grid-column: 1 / -1; }
+        .empty-state-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; }
+        .empty-state p { color: #64748b; font-size: 1.1rem; }
+        /* Cart Modal */        .cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; animation: fadeIn 0.3s ease; }
+        .cart-modal.active { display: flex; align-items: flex-end; justify-content: flex-end; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .cart-sidebar { background: white; width: 100%; max-width: 450px; height: 100vh; display: flex; flex-direction: column; animation: slideIn 0.3s ease; box-shadow: -2px 0 10px rgba(0,0,0,0.1); }
+        .cart-header { padding: 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); color: white; }
+        .cart-header h2 { font-size: 1.5rem; }
+        .close-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; transition: all 0.3s ease; }
+        .close-btn:hover { transform: scale(1.1); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem; }
+        .cart-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; align-items: center; }
+        .cart-item-image { width: 80px; height: 80px; background: #f1f5f9; border-radius: 8px; overflow: hidden; }
+        .cart-item-image img { width: 100%; height: 100%; object-fit: cover; }
+        .cart-item-details { flex: 1; }
+        .cart-item-name { font-weight: 600; color: #1e293b; margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .cart-item-controls { display: flex; align-items: center; gap: 0.5rem; }
+        .qty-btn { background: #f1f5f9; border: none; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
+        .qty-btn:hover { background: #e2e8f0; }
+        .qty-input { width: 40px; text-align: center; border: 1px solid #e2e8f0; border-radius: 4px; padding: 0.25rem; font-weight: 600; }
+        .remove-btn { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1.2rem; transition: all 0.2s ease; margin-left: 0.5rem; }
+        .remove-btn:hover { transform: scale(1.15); }
+        .empty-cart { text-align: center; padding: 2rem; color: #64748b; }
+        .empty-cart-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+        .cart-footer { border-top: 1px solid #e2e8f0; padding: 1.5rem; background: #f8fafc; }
+        .cart-summary { margin-bottom: 1rem; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: #1e293b; font-weight: 700; font-size: 1.1rem; }
+        .checkout-btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, #22c55e 0%, #10b981 100%); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; }
+        .checkout-btn:hover { background: linear-gradient(135deg, #16a34a 0%, #059669 100%); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); transform: scale(1.02); }
+        .checkout-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+        /* Footer */        footer { background: #1e293b; color: white; margin-top: 4rem; border-top: 1px solid #334155; }
+        .footer-container { max-width: 1400px; margin: 0 auto; padding: 3rem 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        .footer-section h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
+        .footer-section p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { color: #cbd5e1; font-size: 0.95rem; margin-bottom: 0.5rem; }
+        .footer-section h3.contact-heading { display: block; }
+        .footer-bottom { border-top: 1px solid #334155; padding-top: 2rem; text-align: center; color: #94a3b8; font-size: 0.9rem; }
+        @media (max-width: 768px) {            .products-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+            .product-name { font-size: 0.9rem; }
+            main { padding: 1.5rem 0.5rem; }
+            .section-header h2 { font-size: 1.5rem; }
+            .cart-sidebar { max-width: 100%; }
+        }    </style></head><body>    <header>        <div class="header-container">            <div class="logo-section">                <div class="logo-icon">🏥</div>                <div class="logo-text">                    <h1>LennQuip Medical Supplies</h1>                    <p>Quality Medical Solutions</p>                </div>            </div>            <div class="header-right">                <div class="contact-info">                    <p>📞 +254 700 396520</p>                    <p>WhatsApp Available</p>                </div>                <div class="cart-icon-wrapper" onclick="toggleCart()">                    <div class="cart-icon">🛒</div>                    <div class="cart-count" id="cartCount" style="display: none;">0</div>                </div>            </div>        </div>    </header>
+    <div class="filter-section">        <div class="filter-container">            <div class="filter-buttons" id="filterButtons">                <button class="filter-btn active" onclick="filterProducts('All')">All</button>                <button class="filter-btn" onclick="filterProducts('Lab')">Lab</button>                <button class="filter-btn" onclick="filterProducts('Medical')">Medical</button>                <button class="filter-btn" onclick="filterProducts('Dental')">Dental</button>                <button class="filter-btn" onclick="filterProducts('Optical')">Optical</button>                <button class="filter-btn" onclick="filterProducts('Pharmaceutical')">Pharmaceutical</button>            </div>        </div>    </div>
+    <main>        <div class="section-header">            <h2 id="sectionTitle">All Products</h2>            <p id="productCount">85 products available</p>        </div>
+        <div class="products-grid" id="productsGrid"></div>    </main>
+    <div class="cart-modal" id="cartModal" onclick="closeCartOnBackdrop(event)">        <div class="cart-sidebar">            <div class="cart-header">                <h2>Selected Items</h2>                <button class="close-btn" onclick="toggleCart()">✕</button>            </div>                        <div class="cart-items" id="cartItems">                <div class="empty-cart">                    <div class="empty-cart-icon">🛍️</div>                    <p>Your list is empty</p>                </div>            </div>
+            <div class="cart-footer">                <div class="cart-summary">                    <div class="summary-row">                        <span>Total Items Selected:</span>                        <span id="totalItems">0</span>                    </div>                </div>                <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>Inquire via WhatsApp</button>            </div>        </div>    </div>
+    <footer>        <div class="footer-container">            <div class="footer-section">                <h3>LennQuip Medical Supplies</h3>                <p>Your trusted partner for quality medical, dental, optical, pharmaceutical, and laboratory supplies. We provide premium healthcare solutions for professionals and institutions.</p>            </div>            <div class="footer-section">                <h3>Categories</h3>                <ul>                    <li>Lab Supplies</li>                    <li>Medical Supplies</li>                    <li>Dental Supplies</li>                    <li>Optical Supplies</li>                    <li>Pharmaceutical Products</li>                </ul>            </div>            <div class="footer-section">                <h3 class="contact-heading">Contact</h3>                <p>📞 Phone: 0700396520</p>                <p>💬 WhatsApp: wa.me/c/254700396520</p>                <p style="margin-top: 1rem; font-size: 0.85rem; color: #64748b;">Fast & Reliable Delivery | Professional Service</p>            </div>        </div>        <div class="footer-bottom">            <p>&copy; 2026 LennQuip Medical Supplies. All rights reserved. | Quality Healthcare Products & Services</p>        </div>    </footer>
+    <script>        // Product Database with accurate lab/medical photography and completely removed pricing properties
         const products = [
             // Lab Supplies (15 items)
-            { id: 1, name: 'Digital Thermometer', category: 'Lab', image: 'https://ibb.co/BHRLTKcY/image.jpg', price: 2500 },
-            { id: 2, name: 'Petri Dishes Set', category: 'Lab', image: 'https://ibb.co/N2qrL2zw/image.jpg', price: 1800 },
-            { id: 3, name: 'Lab Test Tubes', category: 'Lab', image: 'https://ibb.co/tpMpvzVP/image.jpg', price: 3200 },
-            { id: 4, name: 'Microscope Slides', category: 'Lab', image: 'https://ibb.co/TDKLqrGd/image.jpg', price: 2000 },
-            { id: 5, name: 'Beaker Set', category: 'Lab', image: 'https://ibb.co/dsW5vyLF/image.jpg', price: 2800 },
-            { id: 6, name: 'Pipette Set', category: 'Lab', image: 'https://ibb.co/4nL8QPg1/image.jpg', price: 3500 },
-            { id: 7, name: 'Centrifuge Machine', category: 'Lab', image: 'https://ibb.co/MxVMRvPd/image.jpg', price: 45000 },
-            { id: 8, name: 'Specimen Collection Jars', category: 'Lab', image: 'https://ibb.co/GyBVgQr/image.jpg', price: 2200 },
-            { id: 9, name: 'Micropipettes Set', category: 'Lab', image: 'https://ibb.co/bMXdJbSz/image.jpg', price: 8500 },
-            { id: 10, name: 'Lab Safety Goggles', category: 'Lab', image: 'https://ibb.co/rGnGQqFb/image.jpg', price: 1500 },
-            { id: 11, name: 'Burette Set', category: 'Lab', image: 'https://ibb.co/p60T437d/image.jpg', price: 3800 },
-            { id: 12, name: 'Flask Assortment', category: 'Lab', image: 'https://ibb.co/FckV6DP/image.jpg', price: 2600 },
-            { id: 13, name: 'Glass Rods Set', category: 'Lab', image: 'https://ibb.co/vvhtJ50F/image.jpg', price: 1200 },
-            { id: 14, name: 'Lab Aprons (Pack)', category: 'Lab', image: 'https://ibb.co/p699JSp4/image.jpg', price: 3200 },
-            { id: 15, name: 'Microscope Cover Slips', category: 'Lab', image: 'https://ibb.co/BHdTkPG7/image.jpg', price: 1400 },
+            { id: 1, name: 'Digital Thermometer', category: 'Lab', image: 'https://images.unsplash.com/photo-1543224494-ef1cf044e5da?w=500&auto=format&fit=crop&q=60' },
+            { id: 2, name: 'Petri Dishes Set', category: 'Lab', image: 'https://images.unsplash.com/photo-1617155093730-a8bf47be792d?w=500&auto=format&fit=crop&q=60' },
+            { id: 3, name: 'Lab Test Tubes', category: 'Lab', image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=500&auto=format&fit=crop&q=60' },
+            { id: 4, name: 'Microscope Slides', category: 'Lab', image: 'https://images.unsplash.com/photo-1532187863486-abf9d39d6618?w=500&auto=format&fit=crop&q=60' },
+            { id: 5, name: 'Beaker Set', category: 'Lab', image: 'https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=500&auto=format&fit=crop&q=60' },
+            { id: 6, name: 'Pipette Set', category: 'Lab', image: 'https://images.unsplash.com/photo-1579154204601-01588f351167?w=500&auto=format&fit=crop&q=60' },
+            { id: 7, name: 'Centrifuge Machine', category: 'Lab', image: 'https://images.unsplash.com/photo-1581368135153-a506cf13b1e1?w=500&auto=format&fit=crop&q=60' },
+            { id: 8, name: 'Specimen Collection Jars', category: 'Lab', image: 'https://images.unsplash.com/photo-1582719471384-894fbb16e19d?w=500&auto=format&fit=crop&q=60' },
+            { id: 9, name: 'Micropipettes Set', category: 'Lab', image: 'https://images.unsplash.com/photo-1628771065518-0d82f1938462?w=500&auto=format&fit=crop&q=60' },
+            { id: 10, name: 'Lab Safety Goggles', category: 'Lab', image: 'https://images.unsplash.com/photo-1581093196867-9f6c5e57a837?w=500&auto=format&fit=crop&q=60' },
+            { id: 11, name: 'Burette Set', category: 'Lab', image: 'https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=500&auto=format&fit=crop&q=60' },
+            { id: 12, name: 'Flask Assortment', category: 'Lab', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&auto=format&fit=crop&q=60' },
+            { id: 13, name: 'Glass Rods Set', category: 'Lab', image: 'https://images.unsplash.com/photo-1542884748-2b87b36c6b90?w=500&auto=format&fit=crop&q=60' },
+            { id: 14, name: 'Lab Aprons (Pack)', category: 'Lab', image: 'https://images.unsplash.com/photo-1624555130581-1d9cca783bc0?w=500&auto=format&fit=crop&q=60' },
+            { id: 15, name: 'Microscope Cover Slips', category: 'Lab', image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&auto=format&fit=crop&q=60' },
             
             // Medical Supplies (20 items)
-            { id: 16, name: 'Stethoscope Professional', category: 'Medical', image: 'https://ibb.co/7xPzH3HF/image.jpg', price: 5500 },
-            { id: 17, name: 'Blood Pressure Monitor', category: 'Medical', image: 'https://ibb.co/sJcJ5p6Y/image.jpg', price: 4200 },
-            { id: 18, name: 'Oxygen Saturation Meter', category: 'Medical', image: 'https://ibb.co/HTn7cBqV/image.jpg', price: 3800 },
-            { id: 19, name: 'Syringes (Box of 100)', category: 'Medical', image: 'https://ibb.co/KjSwSWnw/image.jpg', price: 1500 },
-            { id: 20, name: 'Medical Gloves (Latex)', category: 'Medical', image: 'https://ibb.co/p6xPjKfY/image.jpg', price: 800 },
-            { id: 21, name: 'Surgical Masks (Box)', category: 'Medical', image: 'https://ibb.co/B2T177wY/image.jpg', price: 1200 },
-            { id: 22, name: 'Bandage Assortment', category: 'Medical', image: 'https://ibb.co/DDCn46pH/image.jpg', price: 950 },
-            { id: 23, name: 'First Aid Kit Complete', category: 'Medical', image: 'https://ibb.co/mCJgRpR5/image.jpg', price: 4500 },
-            { id: 24, name: 'Thermometer Strip', category: 'Medical', image: 'https://ibb.co/JRxrnkhv/image.jpg', price: 600 },
-            { id: 25, name: 'IV Stand', category: 'Medical', image: 'https://ibb.co/yFK0BSjB/image.jpg', price: 8000 },
-            { id: 26, name: 'Blood Glucose Meter', category: 'Medical', image: 'https://ibb.co/bR6Cgfmy/image.jpg', price: 3500 },
-            { id: 27, name: 'Nebulizer Machine', category: 'Medical', image: 'https://ibb.co/kgFFg3zT/image.jpg', price: 6800 },
-            { id: 28, name: 'Heating Pad Electric', category: 'Medical', image: 'https://ibb.co/m5BPVtcX/image.jpg', price: 2800 },
-            { id: 29, name: 'Ice Packs (Set of 3)', category: 'Medical', image: 'https://ibb.co/fYbzmVvk/image.jpg', price: 1900 },
-            { id: 30, name: 'Pulse Oximeter', category: 'Medical', image: 'https://ibb.co/d4cvhL0d/image.jpg', price: 4200 },
-            { id: 31, name: 'Digital Scale', category: 'Medical', image: 'https://ibb.co/VWB7CPVy/image.jpg', price: 5500 },
-            { id: 32, name: 'Elastic Bandages', category: 'Medical', image: 'https://ibb.co/m7kXDV0/image.jpg', price: 1100 },
-            { id: 33, name: 'Wound Dressing Kit', category: 'Medical', image: 'https://ibb.co/KxW5Y45g/image.jpg', price: 2500 },
-            { id: 34, name: 'Alcohol Swabs (Box)', category: 'Medical', image: 'https://ibb.co/s9vJsk23/image.jpg', price: 850 },
-            { id: 35, name: 'Cotton Balls (Bag)', category: 'Medical', image: 'https://ibb.co/BmQn2mFh/image.jpg', price: 650 },
+            { id: 16, name: 'Stethoscope Professional', category: 'Medical', image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=500&auto=format&fit=crop&q=60' },
+            { id: 17, name: 'Blood Pressure Monitor', category: 'Medical', image: 'https://images.unsplash.com/photo-1615461066841-6116ece60e9e?w=500&auto=format&fit=crop&q=60' },
+            { id: 18, name: 'Oxygen Saturation Meter', category: 'Medical', image: 'https://images.unsplash.com/photo-1628771065518-0d82f1938462?w=500&auto=format&fit=crop&q=60' },
+            { id: 19, name: 'Syringes (Box of 100)', category: 'Medical', image: 'https://images.unsplash.com/photo-1576086476234-1103be98f096?w=500&auto=format&fit=crop&q=60' },
+            { id: 20, name: 'Medical Gloves (Latex)', category: 'Medical', image: 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=500&auto=format&fit=crop&q=60' },
+            { id: 21, name: 'Surgical Masks (Box)', category: 'Medical', image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&auto=format&fit=crop&q=60' },
+            { id: 22, name: 'Bandage Assortment', category: 'Medical', image: 'https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=500&auto=format&fit=crop&q=60' },
+            { id: 23, name: 'First Aid Kit Complete', category: 'Medical', image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60' },
+            { id: 24, name: 'Thermometer Strip', category: 'Medical', image: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=500&auto=format&fit=crop&q=60' },
+            { id: 25, name: 'IV Stand', category: 'Medical', image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&auto=format&fit=crop&q=60' },
+            { id: 26, name: 'Blood Glucose Meter', category: 'Medical', image: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=500&auto=format&fit=crop&q=60' },
+            { id: 27, name: 'Nebulizer Machine', category: 'Medical', image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=500&auto=format&fit=crop&q=60' },
+            { id: 28, name: 'Heating Pad Electric', category: 'Medical', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=60' },
+            { id: 29, name: 'Ice Packs (Set of 3)', category: 'Medical', image: 'https://images.unsplash.com/photo-1542884748-2b87b36c6b90?w=500&auto=format&fit=crop&q=60' },
+            { id: 30, name: 'Pulse Oximeter', category: 'Medical', image: 'https://images.unsplash.com/photo-1584515933487-7598213f5cda?w=500&auto=format&fit=crop&q=60' },
+            { id: 31, name: 'Digital Scale', category: 'Medical', image: 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=500&auto=format&fit=crop&q=60' },
+            { id: 32, name: 'Elastic Bandages', category: 'Medical', image: 'https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=500&auto=format&fit=crop&q=60' },
+            { id: 33, name: 'Wound Dressing Kit', category: 'Medical', image: 'https://images.unsplash.com/photo-1578496479914-7ef3b0193be3?w=500&auto=format&fit=crop&q=60' },
+            { id: 34, name: 'Alcohol Swabs (Box)', category: 'Medical', image: 'https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=500&auto=format&fit=crop&q=60' },
+            { id: 35, name: 'Cotton Balls (Bag)', category: 'Medical', image: 'https://images.unsplash.com/photo-1583947581924-860bda6a26df?w=500&auto=format&fit=crop&q=60' },
             
             // Dental Supplies (15 items)
-            { id: 36, name: 'Dental Mirror Set', category: 'Dental', image: 'https://ibb.co/3myH85Vf/image.jpg', price: 3200 },
-            { id: 37, name: 'Toothbrush Professional', category: 'Dental', image: 'https://ibb.co/kg0zJYVL/image.jpg', price: 1200 },
-            { id: 38, name: 'Dental Floss (100m)', category: 'Dental', image: 'https://ibb.co/BVwPj9gD/image.jpg', price: 850 },
-            { id: 39, name: 'Mouthwash Professional', category: 'Dental', image: 'https://ibb.co/mC9bBysJ/image.jpg', price: 2200 },
-            { id: 40, name: 'Scaling Kit', category: 'Dental', image: 'https://ibb.co/JwBnbZ9S/image.jpg', price: 5800 },
-            { id: 41, name: 'Whitening Gel', category: 'Dental', image: 'https://ibb.co/whyncpk2/image.jpg', price: 3500 },
-            { id: 42, name: 'Dental Bibs (50 pack)', category: 'Dental', image: 'https://ibb.co/67LwwBx4/image.jpg', price: 1100 },
-            { id: 43, name: 'Suction Tips', category: 'Dental', image: 'https://ibb.co/fVbSTPTH/image.jpg', price: 2100 },
-            { id: 44, name: 'Dental Cement', category: 'Dental', image: 'https://ibb.co/My0PyjVv/image.jpg', price: 2800 },
-            { id: 45, name: 'Impression Material', category: 'Dental', image: 'https://ibb.co/qL57jGDT/image.jpg', price: 3600 },
-            { id: 46, name: 'Tongue Scraper', category: 'Dental', image: 'https://ibb.co/hJRb0148/image.jpg', price: 450 },
-            { id: 47, name: 'Mouth Guard', category: 'Dental', image: 'https://ibb.co/WWyF3m4s/image.jpg', price: 1500 },
-            { id: 48, name: 'Dental Retainer Cleaner', category: 'Dental', image: 'https://ibb.co/4wb99wCf/image.jpg', price: 1200 },
-            { id: 49, name: 'Dental Probe Set', category: 'Dental', image: 'https://ibb.co/2J8wzh2/image.jpg', price: 2400 },
-            { id: 50, name: 'Filling Material', category: 'Dental', image: 'https://ibb.co/MkP0CFgs/image.jpg', price: 3200 },
+            { id: 36, name: 'Dental Mirror Set', category: 'Dental', image: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&auto=format&fit=crop&q=60' },
+            { id: 37, name: 'Toothbrush Professional', category: 'Dental', image: 'https://images.unsplash.com/photo-1522845015757-50bce044e5da?w=500&auto=format&fit=crop&q=60' },
+            { id: 38, name: 'Dental Floss (100m)', category: 'Dental', image: 'https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=500&auto=format&fit=crop&q=60' },
+            { id: 39, name: 'Mouthwash Professional', category: 'Dental', image: 'https://images.unsplash.com/photo-1559655418-44666574a4f8?w=500&auto=format&fit=crop&q=60' },
+            { id: 40, name: 'Scaling Kit', category: 'Dental', image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500&auto=format&fit=crop&q=60' },
+            { id: 41, name: 'Whitening Gel', category: 'Dental', image: 'https://images.unsplash.com/photo-1445527815219-ecbfec67492e?w=500&auto=format&fit=crop&q=60' },
+            { id: 42, name: 'Dental Bibs (50 pack)', category: 'Dental', image: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&auto=format&fit=crop&q=60' },
+            { id: 43, name: 'Suction Tips', category: 'Dental', image: 'https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=500&auto=format&fit=crop&q=60' },
+            { id: 44, name: 'Dental Cement', category: 'Dental', image: 'https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=500&auto=format&fit=crop&q=60' },
+            { id: 45, name: 'Impression Material', category: 'Dental', image: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=500&auto=format&fit=crop&q=60' },
+            { id: 46, name: 'Tongue Scraper', category: 'Dental', image: 'https://images.unsplash.com/photo-1559599141-3815480a826b?w=500&auto=format&fit=crop&q=60' },
+            { id: 47, name: 'Mouth Guard', category: 'Dental', image: 'https://images.unsplash.com/photo-1513224502586-d1e602410265?w=500&auto=format&fit=crop&q=60' },
+            { id: 48, name: 'Dental Retainer Cleaner', category: 'Dental', image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=500&auto=format&fit=crop&q=60' },
+            { id: 49, name: 'Dental Probe Set', category: 'Dental', image: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&auto=format&fit=crop&q=60' },
+            { id: 50, name: 'Filling Material', category: 'Dental', image: 'https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=500&auto=format&fit=crop&q=60' },
             
             // Optical Supplies (15 items)
-            { id: 51, name: 'Optical Testing Kit', category: 'Optical', image: 'https://ibb.co/YTcsDqkF/image.jpg', price: 12500 },
-            { id: 52, name: 'Eye Drops Premium', category: 'Optical', image: 'https://ibb.co/nstxkWkq/image.jpg', price: 1800 },
-            { id: 53, name: 'Lens Cleaner Solution', category: 'Optical', image: 'https://ibb.co/My0PyjVv/image.jpg', price: 950 },
-            { id: 54, name: 'Optical Frame Display', category: 'Optical', image: 'https://ibb.co/qL57jGDT/image.jpg', price: 2500 },
-            { id: 55, name: 'Lens Cloth Pack', category: 'Optical', image: 'https://ibb.co/hJRb0148/image.jpg', price: 600 },
-            { id: 56, name: 'Contact Lens Case', category: 'Optical', image: 'https://ibb.co/WWyF3m4s/image.jpg', price: 750 },
-            { id: 57, name: 'Auto Refractometer', category: 'Optical', image: 'https://ibb.co/4wb99wCf/image.jpg', price: 28000 },
-            { id: 58, name: 'Vision Chart', category: 'Optical', image: 'https://ibb.co/2J8wzh2/image.jpg', price: 2200 },
-            { id: 59, name: 'Trial Lens Frame', category: 'Optical', image: 'https://ibb.co/MkP0CFgs/image.jpg', price: 4500 },
-            { id: 60, name: 'Lens Blocker', category: 'Optical', image: 'https://ibb.co/YTcsDqkF/image.jpg', price: 1800 },
-            { id: 61, name: 'Phoropter Accessories', category: 'Optical', image: 'https://ibb.co/nstxkWkq/image.jpg', price: 6200 },
-            { id: 62, name: 'Lens Tester', category: 'Optical', image: 'https://ibb.co/My0PyjVv/image.jpg', price: 8500 },
-            { id: 63, name: 'Slit Lamp', category: 'Optical', image: 'https://ibb.co/qL57jGDT/image.jpg', price: 35000 },
-            { id: 64, name: 'Contact Lens Solution', category: 'Optical', image: 'https://ibb.co/hJRb0148/image.jpg', price: 1400 },
-            { id: 65, name: 'Lens Polish Kit', category: 'Optical', image: 'https://ibb.co/WWyF3m4s/image.jpg', price: 2200 },
+            { id: 51, name: 'Optical Testing Kit', category: 'Optical', image: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=500&auto=format&fit=crop&q=60' },
+            { id: 52, name: 'Eye Drops Premium', category: 'Optical', image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60' },
+            { id: 53, name: 'Lens Cleaner Solution', category: 'Optical', image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=500&auto=format&fit=crop&q=60' },
+            { id: 54, name: 'Optical Frame Display', category: 'Optical', image: 'https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=500&auto=format&fit=crop&q=60' },
+            { id: 55, name: 'Lens Cloth Pack', category: 'Optical', image: 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=500&auto=format&fit=crop&q=60' },
+            { id: 56, name: 'Contact Lens Case', category: 'Optical', image: 'https://images.unsplash.com/photo-1516211697506-8360bd7934b0?w=500&auto=format&fit=crop&q=60' },
+            { id: 57, name: 'Auto Refractometer', category: 'Optical', image: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&auto=format&fit=crop&q=60' },
+            { id: 58, name: 'Vision Chart', category: 'Optical', image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&auto=format&fit=crop&q=60' },
+            { id: 59, name: 'Trial Lens Frame', category: 'Optical', image: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=500&auto=format&fit=crop&q=60' },
+            { id: 60, name: 'Lens Blocker', category: 'Optical', image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&auto=format&fit=crop&q=60' },
+            { id: 61, name: 'Phoropter Accessories', category: 'Optical', image: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=500&auto=format&fit=crop&q=60' },
+            { id: 62, name: 'Lens Tester', category: 'Optical', image: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=500&auto=format&fit=crop&q=60' },
+            { id: 63, name: 'Slit Lamp', category: 'Optical', image: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&auto=format&fit=crop&q=60' },
+            { id: 64, name: 'Contact Lens Solution', category: 'Optical', image: 'https://images.unsplash.com/photo-1516211697506-8360bd7934b0?w=500&auto=format&fit=crop&q=60' },
+            { id: 65, name: 'Lens Polish Kit', category: 'Optical', image: 'https://images.unsplash.com/photo-1542884748-2b87b36c6b90?w=500&auto=format&fit=crop&q=60' },
             
             // Pharmaceutical Supplies (20 items)
-            { id: 66, name: 'Paracetamol Tablets', category: 'Pharmaceutical', image: 'https://ibb.co/4wb99wCf/image.jpg', price: 450 },
-            { id: 67, name: 'Antibiotic Cream', category: 'Pharmaceutical', image: 'https://ibb.co/2J8wzh2/image.jpg', price: 1100 },
-            { id: 68, name: 'Vitamin C Supplement', category: 'Pharmaceutical', image: 'https://ibb.co/MkP0CFgs/image.jpg', price: 2800 },
-            { id: 69, name: 'Cough Syrup', category: 'Pharmaceutical', image: 'https://ibb.co/YTcsDqkF/image.jpg', price: 850 },
-            { id: 70, name: 'Antacid Tablets', category: 'Pharmaceutical', image: 'https://ibb.co/nstxkWkq/image.jpg', price: 650 },
-            { id: 71, name: 'Antiseptic Lotion', category: 'Pharmaceutical', image: 'https://ibb.co/My0PyjVv/image.jpg', price: 980 },
-            { id: 72, name: 'Pain Relief Gel', category: 'Pharmaceutical', image: 'https://ibb.co/qL57jGDT/image.jpg', price: 1500 },
-            { id: 73, name: 'Allergy Medicine', category: 'Pharmaceutical', image: 'https://ibb.co/hJRb0148/image.jpg', price: 1200 },
-            { id: 74, name: 'Sleep Aid Tablets', category: 'Pharmaceutical', image: 'https://ibb.co/WWyF3m4s/image.jpg', price: 2100 },
-            { id: 75, name: 'Digestive Enzymes', category: 'Pharmaceutical', image: 'https://ibb.co/4wb99wCf/image.jpg', price: 1800 },
-            { id: 76, name: 'Iron Supplement', category: 'Pharmaceutical', image: 'https://ibb.co/2J8wzh2/image.jpg', price: 2400 },
-            { id: 77, name: 'Multivitamin Pack', category: 'Pharmaceutical', image: 'https://ibb.co/MkP0CFgs/image.jpg', price: 3200 },
-            { id: 78, name: 'Calcium Tablets', category: 'Pharmaceutical', image: 'https://ibb.co/YTcsDqkF/image.jpg', price: 1600 },
-            { id: 79, name: 'Vitamin D3 Supplement', category: 'Pharmaceutical', image: 'https://ibb.co/nstxkWkq/image.jpg', price: 2200 },
-            { id: 80, name: 'Zinc Lozenges', category: 'Pharmaceutical', image: 'https://ibb.co/My0PyjVv/image.jpg', price: 1100 },
-            { id: 81, name: 'Probiotics Capsules', category: 'Pharmaceutical', image: 'https://ibb.co/qL57jGDT/image.jpg', price: 2500 },
-            { id: 82, name: 'Omega-3 Supplements', category: 'Pharmaceutical', image: 'https://ibb.co/hJRb0148/image.jpg', price: 3800 },
-            { id: 83, name: 'Antifungal Cream', category: 'Pharmaceutical', image: 'https://ibb.co/WWyF3m4s/image.jpg', price: 1400 },
-            { id: 84, name: 'Cold & Flu Tablet', category: 'Pharmaceutical', image: 'https://ibb.co/4wb99wCf/image.jpg', price: 950 },
-            { id: 85, name: 'Herbal Supplement Mix', category: 'Pharmaceutical', image: 'https://ibb.co/2J8wzh2/image.jpg', price: 2000 },
+            { id: 66, name: 'Paracetamol Tablets', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=60' },
+            { id: 67, name: 'Antibiotic Cream', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60' },
+            { id: 68, name: 'Vitamin C Supplement', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1616679911721-eff6eec18fcd?w=500&auto=format&fit=crop&q=60' },
+            { id: 69, name: 'Cough Syrup', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1550572017-edd951b55104?w=500&auto=format&fit=crop&q=60' },
+            { id: 70, name: 'Antacid Tablets', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=500&auto=format&fit=crop&q=60' },
+            { id: 71, name: 'Antiseptic Lotion', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=500&auto=format&fit=crop&q=60' },
+            { id: 72, name: 'Pain Relief Gel', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60' },
+            { id: 73, name: 'Allergy Medicine', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=500&auto=format&fit=crop&q=60' },
+            { id: 74, name: 'Sleep Aid Tablets', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1550572017-edd951b55104?w=500&auto=format&fit=crop&q=60' },
+            { id: 75, name: 'Digestive Enzymes', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1616679911721-eff6eec18fcd?w=500&auto=format&fit=crop&q=60' },
+            { id: 76, name: 'Iron Supplement', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=500&auto=format&fit=crop&q=60' },
+            { id: 77, name: 'Multivitamin Pack', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=500&auto=format&fit=crop&q=60' },
+            { id: 78, name: 'Calcium Tablets', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1550572017-edd951b55104?w=500&auto=format&fit=crop&q=60' },
+            { id: 79, name: 'Vitamin D3 Supplement', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1616679911721-eff6eec18fcd?w=500&auto=format&fit=crop&q=60' },
+            { id: 80, name: 'Zinc Lozenges', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=500&auto=format&fit=crop&q=60' },
+            { id: 81, name: 'Probiotics Capsules', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=60' },
+            { id: 82, name: 'Omega-3 Supplements', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1616679911721-eff6eec18fcd?w=500&auto=format&fit=crop&q=60' },
+            { id: 83, name: 'Antifungal Cream', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60' },
+            { id: 84, name: 'Cold & Flu Tablet', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=500&auto=format&fit=crop&q=60' },
+            { id: 85, name: 'Herbal Supplement Mix', category: 'Pharmaceutical', image: 'https://images.unsplash.com/photo-1550572017-edd951b55104?w=500&auto=format&fit=crop&q=60' }
         ];
 
         let currentCategory = 'All';
         let cart = JSON.parse(localStorage.getItem('lennquip_cart')) || [];
 
-        // Filter Products
+        // Category Filter Actions
         function filterProducts(category) {
             currentCategory = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             
-            // Update buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
+            if(event && event.target) {
+                event.target.classList.add('active');
+            }
 
-            // Update title and count
-            document.getElementById('sectionTitle').textContent = 
-                category === 'All' ? 'All Products' : category + ' Supplies';
-            
-            const filtered = category === 'All' 
-                ? products 
-                : products.filter(p => p.category === category);
-            
-            document.getElementById('productCount').textContent = 
-                filtered.length + ' products available';
+            document.getElementById('sectionTitle').textContent = category === 'All' ? 'All Products' : category + ' Supplies';
+            const filtered = category === 'All' ? products : products.filter(p => p.category === category);
+            document.getElementById('productCount').textContent = filtered.length + ' products available';
 
             renderProducts(filtered);
         }
 
-        // Add to Cart
+        // Render Cards without prices
+        function renderProducts(productsToRender) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            if (productsToRender.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <p>No products found in this category.</p>
+                    </div>`;
+                return;
+            }
+
+            productsToRender.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                const singleProductMsg = encodeURIComponent(
+                    `Hello LennQuip Medical Supplies, I am interested in inquiring about availability and pricing for: "${product.name}" (Category: ${product.category}).`
+                );
+
+                card.innerHTML = `
+                    <div class="product-image-wrapper">
+                        <span class="category-badge">${product.category}</span>
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?w=500&auto=format&fit=crop&q=60'">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-buttons">
+                            <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                                🛒 Add to Inquiry List
+                            </button>
+                            <a href="https://wa.me/254700396520?text=${singleProductMsg}" target="_blank" class="whatsapp-btn">
+                                💬 Quick Instant Inquiry
+                            </a>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Product Selection Actions
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
             const cartItem = cart.find(item => item.id === productId);
@@ -894,56 +260,92 @@
             if (cartItem) {
                 cartItem.quantity += 1;
             } else {
-                cart.push({
-                    ...product,
-                    quantity: 1
+                cart.push({ ...product, quantity: 1 });
+            }
+            updateCart();
+        }
+
+        function changeQuantity(productId, change) {
+            const cartItem = cart.find(item => item.id === productId);
+            if (!cartItem) return;
+
+            cartItem.quantity += change;
+            if (cartItem.quantity <= 0) {
+                removeFromCart(productId);
+            } else {
+                updateCart();
+            }
+        }
+
+        function handleQtyInput(productId, value) {
+            const cartItem = cart.find(item => item.id === productId);
+            if (!cartItem) return;
+
+            const parsedVal = parseInt(value);
+            if (isNaN(parsedVal) || parsedVal <= 0) {
+                removeFromCart(productId);
+            } else {
+                cartItem.quantity = parsedVal;
+                updateCart();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+        }
+
+        // Sidebar Sync without prices
+        function updateCart() {
+            localStorage.setItem('lennquip_cart', JSON.stringify(cart));
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            const cartCountBadge = document.getElementById('cartCount');
+            if (totalItems > 0) {
+                cartCountBadge.textContent = totalItems;
+                cartCountBadge.style.display = 'flex';
+            } else {
+                cartCountBadge.style.display = 'none';
+            }
+
+            document.getElementById('totalItems').textContent = totalItems;
+
+            const cartItemsContainer = document.getElementById('cartItems');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛍️</div>
+                        <p>Your inquiry list is empty</p>
+                    </div>`;
+                checkoutBtn.disabled = true;
+            } else {
+                checkoutBtn.disabled = false;
+                cartItemsContainer.innerHTML = '';
+
+                cart.forEach(item => {
+                    const itemRow = document.createElement('div');
+                    itemRow.className = 'cart-item';
+                    itemRow.innerHTML = `
+                        <div class="cart-item-image">
+                            <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?w=500&auto=format&fit=crop&q=60'">
+                        </div>
+                        <div class="cart-item-details">
+                            <h4 class="cart-item-name">${item.name}</h4>
+                            <div class="cart-item-controls">
+                                <button class="qty-btn" onclick="changeQuantity(${item.id}, -1)">-</button>
+                                <input type="number" class="qty-input" value="${item.quantity}" onchange="handleQtyInput(${item.id}, this.value)">
+                                <button class="qty-btn" onclick="changeQuantity(${item.id}, 1)">+</button>
+                                <button class="remove-btn" onclick="removeFromCart(${item.id})">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemRow);
                 });
             }
-
-            saveCart();
-            updateCartCount();
-            renderCart();
-            toggleCart();
         }
 
-        // Render Products
-        function renderProducts(productsToRender) {
-            const grid = document.getElementById('productsGrid');
-            
-            if (productsToRender.length === 0) {
-                grid.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📦</div>
-                        <p>No products found in this category</p>
-                    </div>
-                `;
-                return;
-            }
-
-            grid.innerHTML = productsToRender.map(product => `
-                <div class="product-card">
-                    <div class="product-image-wrapper">
-                        <img src="${product.image}" alt="${product.name}" 
-                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22%3E%3Crect fill=%22%23f1f5f9%22 width=%22300%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2216%22 fill=%22%23676767%22%3E${product.name}%3C/text%3E%3C/svg%3E'">
-                        <div class="category-badge">${product.category}</div>
-                    </div>
-                    <div class="product-details">
-                        <h3 class="product-name">${product.name}</h3>
-                        <div class="product-buttons">
-                            <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
-                                🛒 Add to Cart
-                            </button>
-                            <a href="https://wa.me/c/254700396520?text=Hi! I'm interested in purchasing: ${encodeURIComponent(product.name)}" 
-                               target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
-                                💬 Buy on WhatsApp
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Cart Functions
         function toggleCart() {
             document.getElementById('cartModal').classList.toggle('active');
         }
@@ -954,103 +356,29 @@
             }
         }
 
-        function renderCart() {
-            const cartItemsDiv = document.getElementById('cartItems');
-            
-            if (cart.length === 0) {
-                cartItemsDiv.innerHTML = `
-                    <div class="empty-cart">
-                        <div class="empty-cart-icon">🛍️</div>
-                        <p>Your cart is empty</p>
-                    </div>
-                `;
-                return;
-            }
-
-            cartItemsDiv.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <div class="cart-item-image">
-                        <img src="${item.image}" alt="${item.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22%3E%3Crect fill=%22%23f1f5f9%22 width=%2280%22 height=%2280%22/%3E%3C/svg%3E'">
-                    </div>
-                    <div class="cart-item-details">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-controls">
-                            <button class="qty-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">−</button>
-                            <input type="number" class="qty-input" value="${item.quantity}" onchange="updateQuantity(${item.id}, this.value)" min="1">
-                            <button class="qty-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
-                            <button class="remove-btn" onclick="removeFromCart(${item.id})">🗑️</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function updateQuantity(productId, newQuantity) {
-            const cartItem = cart.find(item => item.id === productId);
-            if (cartItem) {
-                cartItem.quantity = Math.max(1, parseInt(newQuantity));
-                saveCart();
-                updateCartCount();
-                renderCart();
-            }
-        }
-
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            saveCart();
-            updateCartCount();
-            renderCart();
-        }
-
-        function saveCart() {
-            localStorage.setItem('lennquip_cart', JSON.stringify(cart));
-        }
-
-        function updateCartCount() {
-            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const cartCountElement = document.getElementById('cartCount');
-            if (count > 0) {
-                cartCountElement.textContent = count;
-                cartCountElement.style.display = 'flex';
-            } else {
-                cartCountElement.style.display = 'none';
-            }
-            updateCartSummary();
-        }
-
-        function updateCartSummary() {
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById('totalItems').textContent = totalItems;
-            document.getElementById('checkoutBtn').disabled = cart.length === 0;
-        }
-
+        // WhatsApp inquiry structure formatted with clean lists, ignoring prices entirely
         function checkout() {
             if (cart.length === 0) return;
 
-            const cartDetails = cart.map(item => 
-                `${item.name} x${item.quantity} = KES ${(item.price * item.quantity).toLocaleString()}`
-            ).join('%0A');
+            let orderLines = `*LENNQUIP MEDICAL SUPPLIES - NEW INQUIRY*%0A`;
+            orderLines += `-------------------------------------------%0A`;
 
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            const message = `Hi! I would like to place an order:%0A%0A${cartDetails}%0A%0A*Total: KES ${total.toLocaleString()}*%0A%0APlease confirm and proceed with payment.`;
+            cart.forEach((item, index) => {
+                orderLines += `${index + 1}. *${item.name}*%0A`;
+                orderLines += `   Requested Qty: ${item.quantity}%0A`;
+                orderLines += `   Category: ${item.category}%0A%0A`;
+            });
 
-            window.open(`https://wa.me/c/254700396520?text=${message}`, '_blank');
+            orderLines += `-------------------------------------------%0A`;
+            orderLines += `Please review this item list and provide a complete quotation with delivery timelines.`;
 
-            // Clear cart after checkout
-            setTimeout(() => {
-                cart = [];
-                saveCart();
-                updateCartCount();
-                renderCart();
-                toggleCart();
-            }, 500);
+            const whatsappUrl = `https://wa.me/254700396520?text=${orderLines}`;
+            window.open(whatsappUrl, '_blank');
         }
 
-        // Initial render
-        renderProducts(products);
-        updateCartCount();
-    </script>
-</body>
-</html>
+        // Initialize Store Layout
+        window.addEventListener('DOMContentLoaded', () => {
+            renderProducts(products);
+            updateCart();
+        });
+    </script></body></html>
